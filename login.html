@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPECTR | Login</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="shortcut icon" href="images/logo/SPECTR-logo-new.png" type="image/x-icon">
+
+    <!-- Bootstrap v5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="container py-3 h-100 d-flex">
+        <div class="row d-flex justify-content-md-center align-items-center mx-auto">
+            <div class="col-xl-10">
+                <div class="card rounded-3">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+                                <form class="my-5" id="mainform">
+                                    <h1 id="welcome" class="fw-bold">WELCOME!</h1>
+                                    <p class="fw-semibold mt-3">Log in to your Account</p>
+                                    <!-- Email Input with icon -->
+                                    <div class="input-group mb-4 mt-5">
+                                        <span class="input-group-text" id="email-icon">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input type="email" id="email" class="form-control" placeholder="Email"
+                                            aria-label="Email" aria-describedby="email-icon">
+                                    </div>
+
+                                    <div class="input-group mb-4 position-relative">
+                                        <span class="input-group-text" id="password-icon">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" id="password" class="form-control rounded-end"
+                                            placeholder="Password" aria-label="Password"
+                                            aria-describedby="password-icon">
+                                        <span class="position-absolute top-50 end-0 translate-middle-y me-3">
+                                            <i class="far fa-eye" id="togglePassword" style="cursor: pointer;"></i>
+                                        </span>
+                                    </div>
+                                    <p class="fw-semibold d-flex justify-content-end">
+                                        <a id="forgotpass" class="text-decoration-none"
+                                            href="code-verification.html">Forgot
+                                            Password?</a>
+                                    </p>
+                                    <center>
+                                        <button class="rounded-5 mt-5 fw-bolder">LOGIN</button>
+                                    </center>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="rightside" class="col-lg-6 d-none d-lg-flex align-items-center px-5">
+                            <div class="my-1 container text-white">
+                                <img src="images/Privacy policy-rafiki.png" class="img-fluid" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.querySelector('#togglePassword');
+        const showPassword = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, get, ref, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyD56TvVuz9rl9wvRN9VhkJH_Gz8WHpFh_Q",
+            authDomain: "spectre-8f79c.firebaseapp.com",
+            databaseURL: "https://spectre-8f79c-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "spectre-8f79c",
+            storageBucket: "spectre-8f79c.appspot.com",
+            messagingSenderId: "875337744237",
+            appId: "1:875337744237:web:d2dd76f311523b30b56464",
+            measurementId: "G-13VZ185YFT"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth();
+        const dbref = ref(db);
+
+        let firstName = document.getElementById('firstName');
+        let middleName = document.getElementById('middleName');
+        let lastName = document.getElementById('lastName');
+        let houseNo = document.getElementById('houseNo');
+        let street = document.getElementById('street');
+        let barangay = document.getElementById('barangay');
+        let province = document.getElementById('province');
+        let contactNo = document.getElementById('contactNo');
+        let email = document.getElementById('email');
+        let companyName = document.getElementById('companyName');
+        let companyContactNo = document.getElementById('companyContactNo');
+        let companyEmail = document.getElementById('companyEmail');
+        let password = document.getElementById('password');
+        let mainform = document.getElementById('mainform');
+
+        let SignInUser = evt => {
+            evt.preventDefault();
+
+            signInWithEmailAndPassword(auth, email.value, password.value)
+                .then((credentials) => {
+                    get(child(dbref, 'Registered_Accounts/' + credentials.user.uid)).then((snapshot) => {
+                        if (snapshot.exists) {
+                            sessionStorage.setItem("user-info", JSON.stringify({
+                                firstname: snapshot.val().firstname,
+                                middlename: snapshot.val().middlename,
+                                lastname: snapshot.val().lastname,
+                                house_no: snapshot.val().houseno,
+                                street: snapshot.val().street,
+                                barangay: snapshot.val().barangay,
+                                province: snapshot.val().province,
+                                contact_no: snapshot.val().contactno,
+                                company_name: snapshot.val().companyname,
+                                company_contact_no: snapshot.val().companycontactno,
+                                company_email: snapshot.val().companyemail
+                            }))
+                            sessionStorage.setItem("user-creds", JSON.stringify(credentials.user));
+                            window.location.href = 'client.html';
+                        }
+                    })
+                })
+                .catch((error) => {
+                    alert(error.message);
+                    console.log(error.code);
+                    console.log(error.message);
+                })
+        }
+
+        mainform.addEventListener('submit', SignInUser);
+    </script>
+
+</body>
+
+</html>
