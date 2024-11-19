@@ -213,6 +213,7 @@ const RegisterUser = async (evt) => {
                 barangay: barangay.value,
                 address_info: addressInfo.value,
                 email: email.value,
+                password: password.value,
                 company_name: companyName.value,
                 company_email: companyEmail.value,
                 company_telephone_no: companyTelephoneNo.value,

@@ -13,6 +13,46 @@ $(document).ready(function () {
     }
 });
 
+/* SIGN OUT BTN */
+let UserCreds = JSON.parse(sessionStorage.getItem("user-creds"));
+let UserInfo = JSON.parse(sessionStorage.getItem("user-info"));
+
+console.log(UserInfo);
+
+let userFirstname = document.getElementById('user_firstname');
+let userCompanyName = document.getElementById('company_name');
+let signoutButton = document.getElementById('signoutbutton');
+
+// Display firstname and company name, with checks to confirm data is present
+if (UserInfo && UserInfo.firstname) {
+    userFirstname.innerText = `${UserInfo.firstname}`;
+} else {
+    console.log("Firstname is missing in UserInfo or is undefined.");
+}
+
+if (UserInfo && UserInfo.company_name) {
+    userCompanyName.innerText = `${UserInfo.company_name}`;
+} else {
+    console.log("Company name is missing in UserInfo or is undefined.");
+}
+
+// Sign-out functionality
+let Signout = () => {
+    sessionStorage.removeItem("user-creds");
+    sessionStorage.removeItem("user-info");
+    window.location.href = 'login.html';
+}
+
+// Check credentials on page load
+let CheckCred = () => {
+    if (!sessionStorage.getItem("user-creds")) {
+        window.location.href = 'login.html';
+    }
+}
+
+window.addEventListener('load', CheckCred);
+signoutButton.addEventListener('click', Signout);
+
 document.addEventListener("DOMContentLoaded", function () {
     const links = document.querySelectorAll("#sidebar .event-link");
     const contentItems = document.querySelectorAll(".content-item");
@@ -68,31 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-/* SIGN OUT BTN*/
-let UserCreds = JSON.parse(sessionStorage.getItem("user-creds"));
-let UserInfo = JSON.parse(sessionStorage.getItem("user-info"));
-
-let userFirstname = document.getElementById('user_firstname');
-let userCompanyName = document.getElementById('company_name');
-let signoutButton = document.getElementById('signoutbutton');
-
-userFirstname.innerText = `${UserInfo.firstname}`;
-userCompanyName.innerText = `${UserInfo.company_name}`;
-
-let Signout = () => {
-    sessionStorage.removeItem("user-creds");
-    sessionStorage.removeItem("user-info");
-    window.location.href = 'login.html'
-}
-
-let CheckCred = () => {
-    if (!sessionStorage.getItem("user-creds"))
-        window.location.href = 'login.html'
-}
-
-window.addEventListener('load', CheckCred);
-signoutButton.addEventListener('click', Signout);
-
 
 /*DATE*/
 document.addEventListener("DOMContentLoaded", function () {
@@ -130,7 +145,7 @@ $(document).ready(function () {
         } else if (targetInputId === "newPassword") {
             togglePasswordVisibility(confirmNewPasswordInput, $("#passwordToggleBtn i.bi-eye"), $("#passwordToggleBtn i.bi-eye-slash"));
         }
-        
+
         /*CHANGE PIN EYE TOGGLER*/
 
         /*
@@ -147,54 +162,54 @@ $(document).ready(function () {
 });
 
 /*PIN MODAL */
-document.getElementById('profile-link').addEventListener('click', function (event) {
-    event.preventDefault();
+// document.getElementById('profile-link').addEventListener('click', function (event) {
+//     event.preventDefault();
 
-    var modal = new bootstrap.Modal(document.getElementById('pinModal'), {
-        backdrop: 'static',
-        keyboard: false
-    });
-    modal.show();
-});
+//     var modal = new bootstrap.Modal(document.getElementById('pinModal'), {
+//         backdrop: 'static',
+//         keyboard: false
+//     });
+//     modal.show();
+// });
 
-document.getElementById('staff-management-link').addEventListener('click', function (event) {
-    event.preventDefault();
+// document.getElementById('staff-management-link').addEventListener('click', function (event) {
+//     event.preventDefault();
 
-    var modal = new bootstrap.Modal(document.getElementById('pinModal'), {
-        backdrop: 'static',
-        keyboard: false
-    });
-    modal.show();
-});
+//     var modal = new bootstrap.Modal(document.getElementById('pinModal'), {
+//         backdrop: 'static',
+//         keyboard: false
+//     });
+//     modal.show();
+// });
 
-document.getElementById('pin-form').addEventListener('submit', function (event) {
-    event.preventDefault();
+// document.getElementById('pin-form').addEventListener('submit', function (event) {
+//     event.preventDefault();
 
-    var password = document.getElementById('userPin').value;
+//     var password = document.getElementById('userPin').value;
 
-    if (password) {
-        var modal = document.getElementById('pinModal');  // Get the modal element
+//     if (password) {
+//         var modal = document.getElementById('pinModal');  // Get the modal element
 
-        if (modal.classList.contains('profile-modal')) {
-            window.location.hash = '#profile';
-        }
-        else if (modal.classList.contains('staff-management-modal')) {
-            window.location.hash = '#staff-management';
-        }
+//         if (modal.classList.contains('profile-modal')) {
+//             window.location.hash = '#profile';
+//         }
+//         else if (modal.classList.contains('staff-management-modal')) {
+//             window.location.hash = '#staff-management';
+//         }
 
-        var bootstrapModal = bootstrap.Modal.getInstance(modal);
-        bootstrapModal.hide();
-    } else {
-        alert('Incorrect pin.');
-    }
-});
+//         var bootstrapModal = bootstrap.Modal.getInstance(modal);
+//         bootstrapModal.hide();
+//     } else {
+//         alert('Incorrect pin.');
+//     }
+// });
 
 /*PIN MODAL CANCEL BTN */
 function goToDashboard() {
     window.location.href = 'client.html';
 }
 
-/*URL PATH*/
+/*URL PATH
 function changeUrl(content) {
     const newUrl = `client.html#${content}`;
 
@@ -207,7 +222,7 @@ function changeUrl(content) {
     if (selectedContent) {
         selectedContent.style.display = 'block'; 
     }
-}
+} */
 
 /*STAFF MANAGEMENT TO ADD STAFF CONTENT */
 function showContent6() {
@@ -224,6 +239,7 @@ function goToContent3(event) {
 
     document.getElementById('content3').style.display = 'block';
     document.getElementById('content6').style.display = 'none';
+    document.getElementById('content7').style.display = 'none';
 
     window.location.hash = '#staff_management';
 }
