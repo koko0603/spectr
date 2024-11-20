@@ -112,6 +112,7 @@ const confirmPassword = document.getElementById('confirmPassword');
 const passwordFeedback = document.getElementById('passwordFeedback');
 
 const companyName = document.getElementById('companyName');
+const companyBranch = document.getElementById('companyBranch');
 const companyEmail = document.getElementById('companyEmail');
 const companyTelephoneNo = document.getElementById('companyTelephoneNo');
 const companyAddress = document.getElementById('companyAddress');
@@ -146,7 +147,7 @@ const RegisterUser = async (evt) => {
         return; // Stop processing
     } else {
         // Check if company email already exists in Firebase Database
-        const companyEmailRef = ref(db, `UsersAuthList/`);
+        const companyEmailRef = ref(db, `Registered_Accounts/`);
         const snapshot = await get(companyEmailRef);
         let isEmailTaken = false;
 
@@ -215,6 +216,7 @@ const RegisterUser = async (evt) => {
                 email: email.value,
                 password: password.value,
                 company_name: companyName.value,
+                company_branch: companyBranch.value,
                 company_email: companyEmail.value,
                 company_telephone_no: companyTelephoneNo.value,
                 company_address: companyAddress.value,
@@ -223,7 +225,7 @@ const RegisterUser = async (evt) => {
                 company_city: companyCity.value,
                 company_barangay: companyBarangay.value
             });
-            let successModal = new bootstrap.Modal(document.getElementById('staffSuccessModal'));
+            let successModal = new bootstrap.Modal(document.getElementById('createUserModal'));
             successModal.show();
         })
         .catch((error) => {

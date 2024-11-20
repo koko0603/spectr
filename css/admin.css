@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -16,6 +16,7 @@
 .section-bg-white {
     background: #fbfbfb;
 }
+
 nav {
     background-color: #0d0d0d;
 }
@@ -54,7 +55,7 @@ nav {
 .nav-link:hover {
     letter-spacing: 1px;
     color: #ffffff;
-    text-shadow:0px 0px 20px  #09dcb5;
+    text-shadow: 0px 0px 20px #09dcb5;
 }
 
 
@@ -90,13 +91,18 @@ nav {
     color: #09DCB5;
 }
 
-.content{
-    margin-top:100px;
+.content {
+    margin-top: 100px;
 
 }
 
-@media (max-width: 320px){
-    .content{
+.data_table .btn {
+    padding: 5px 10px;
+    margin: 10px 3px 10px 0;
+}
+
+@media (max-width: 320px) {
+    .content {
         margin-top: 150px;
     }
 }

@@ -41,21 +41,22 @@
                                         <span class="input-group-text" id="email-icon">
                                             <i class="fas fa-user"></i>
                                         </span>
-                                        <input type="email" id="email" class="form-control" placeholder="Email"
+                                        <input type="email" id="email" class="form-control border-3" placeholder="Email"
                                             aria-label="Email" aria-describedby="email-icon">
                                     </div>
 
-                                    <div class="input-group mb-4 position-relative">
+                                    <div class="input-group mb-4 mt-5">
                                         <span class="input-group-text" id="password-icon">
                                             <i class="fas fa-lock"></i>
                                         </span>
-                                        <input type="password" id="password" class="form-control rounded-end"
-                                            placeholder="Password" aria-label="Password"
+                                        <input type="password" id="password" class="form-control border-3" placeholder="Password" aria-label="Password"
                                             aria-describedby="password-icon">
-                                        <span class="position-absolute top-50 end-0 translate-middle-y me-3">
-                                            <i class="far fa-eye" id="togglePassword" style="cursor: pointer;"></i>
+                                        <span class="input-group-text" id="toggle-password-icon" style="cursor: pointer;">
+                                            <i class="far fa-eye" id="togglePassword"></i>
                                         </span>
                                     </div>
+                                    
+
                                     <p class="fw-semibold d-flex justify-content-end">
                                         <a id="forgotpass" class="text-decoration-none"
                                             href="code-verification.html">Forgot
@@ -81,14 +82,17 @@
     <script>
         // Toggle password visibility
         const togglePassword = document.querySelector('#togglePassword');
-        const showPassword = document.querySelector('#password');
-
+        const passwordField = document.querySelector('#password');
+        
         togglePassword.addEventListener('click', function () {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+        
+            // Toggle the icon class
             this.classList.toggle('fa-eye-slash');
         });
+        
+
     </script>
 
     <script type="module" src="js/login.js"></script>
