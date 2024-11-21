@@ -251,7 +251,7 @@ function viewButtonClicked(idnumber) {
                     document.getElementById("viewFirstname").value = userData.staff_firstname;
                     document.getElementById("viewMiddlename").value = userData.staff_middlename;
                     document.getElementById("viewLastname").value = userData.staff_lastname;
-                    document.getElementById("viewContactNo").value = userData.staff_contact_no;
+                    document.getElementById("viewContactNo").value = userData.staff_contact_no.slice(3);
                     document.getElementById('viewGender').value = userData.staff_gender;
                     document.getElementById('viewRegion').value = userData.staff_region;
                     document.getElementById('viewProvince').value = userData.staff_province;

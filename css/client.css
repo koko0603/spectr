@@ -369,6 +369,13 @@ ul.CTAs a {
     background-color: rgb(244, 244, 244);
 }
 
+.modal-content {
+    height: 90vh;
+    overflow: auto;
+}
+
+
+
 #saveEditBtn {
     background-color: #50a742;
     color: white;

@@ -21,6 +21,11 @@ console.log(UserInfo);
 
 let userFirstname = document.getElementById('user_firstname');
 let userCompanyName = document.getElementById('company_name');
+let displayCompanyName = document.getElementById('displayCompanyName');
+let displayCompanyName2 = document.getElementById('displayCompanyName2');
+let displayCompanyBranch = document.getElementById('displayCompanyBranch');
+let displayCompanyAddress = document.getElementById('displayCompanyAddress');
+let displayCompanyTelephoneNo = document.getElementById('displayCompanyTelephoneNo');
 let signoutButton = document.getElementById('signoutbutton');
 
 // Display firstname and company name, with checks to confirm data is present
@@ -30,10 +35,40 @@ if (UserInfo && UserInfo.firstname) {
     console.log("Firstname is missing in UserInfo or is undefined.");
 }
 
-if (UserInfo && UserInfo.company_name) {
+if(UserInfo && UserInfo.company_name) {
     userCompanyName.innerText = `${UserInfo.company_name}`;
 } else {
     console.log("Company name is missing in UserInfo or is undefined.");
+}
+
+if (UserInfo && UserInfo.company_name) {
+    displayCompanyName.innerText = `${UserInfo.company_name}`;
+} else {
+    console.log("Company name is missing in UserInfo or is undefined.");
+}
+
+if(UserInfo && UserInfo.company_name) {
+    displayCompanyName2.innerText = `${UserInfo.company_name}`;
+} else {
+    console.log("Company name is missing in UserInfo or is undefined.");
+}
+
+if (UserInfo && UserInfo.company_branch) {
+    displayCompanyBranch.innerText = `${UserInfo.company_branch}`;
+} else {
+    console.log("Company branch is missing in UserInfo or is undefined.");
+}
+
+if (UserInfo && UserInfo.company_address) {
+    displayCompanyAddress.innerText = `${UserInfo.company_address}`;
+} else {
+    console.log("Company address is missing in UserInfo or is undefined.");
+}
+
+if(UserInfo && UserInfo.company_telephone_no) {
+    displayCompanyTelephoneNo.innerText = `${UserInfo.company_telephone_no}`;
+} else {
+    console.log("Company telephone nummber is missing in UserInfo or is undefined.")
 }
 
 // Sign-out functionality

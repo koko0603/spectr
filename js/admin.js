@@ -126,7 +126,7 @@ function viewButtonClicked(company_email) {
                 document.getElementById("viewFirstname").value = userData.firstname;
                 document.getElementById("viewMiddlename").value = userData.middlename;
                 document.getElementById("viewLastname").value = userData.lastname;
-                document.getElementById("viewContactNo").value = userData.contact_no;
+                document.getElementById("viewContactNo").value = userData.contact_no.slice(3);
                 document.getElementById('viewGender').value = userData.gender;
                 document.getElementById('viewEmail').value = userData.email;
                 document.getElementById('viewRegion').value = userData.region;

@@ -43,6 +43,7 @@ const confirmPassword = document.getElementById('confirmPassword');
 const passwordFeedback = document.getElementById('passwordFeedback');
 
 const companyName = document.getElementById('companyName');
+const companyBranch = document.getElementById('companyBranch');
 const companyEmail = document.getElementById('companyEmail');
 const companyTelephoneNo = document.getElementById('companyTelephoneNo');
 const companyAddress = document.getElementById('companyAddress');
@@ -71,6 +72,7 @@ let SignInUser = evt => {
                         address_info: snapshot.val().address_info,
                         email: snapshot.val().email,
                         company_name: snapshot.val().company_name,
+                        company_branch: snapshot.val().company_branch,
                         company_email: snapshot.val().company_email,
                         company_telephone_no: snapshot.val().company_telephone_no,
                         company_address: snapshot.val().company_address,
