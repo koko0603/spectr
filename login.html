@@ -33,7 +33,7 @@
                     <div class="row g-0">
                         <div class="col-lg-6">
                             <div class="card-body p-md-5 mx-md-4">
-                                <form class="my-5" id="mainform">
+                                <form class="my-5 needs-validation" id="mainform" novalidate>
                                     <h1 id="welcome" class="fw-bold">WELCOME!</h1>
                                     <p class="fw-semibold mt-3">Log in to your Account</p>
                                     <!-- Email Input with icon -->
@@ -43,6 +43,9 @@
                                         </span>
                                         <input type="email" id="email" class="form-control border-3" placeholder="Email"
                                             aria-label="Email" aria-describedby="email-icon">
+                                            <div class="invalid-feedback">
+                                                *Please enter your email.
+                                            </div>
                                     </div>
 
                                     <div class="input-group mb-4 mt-5">
@@ -54,8 +57,10 @@
                                         <span class="input-group-text" id="toggle-password-icon" style="cursor: pointer;">
                                             <i class="far fa-eye" id="togglePassword"></i>
                                         </span>
+                                        <div class="invalid-feedback">
+                                            *Please enter your password.
+                                        </div>
                                     </div>
-                                    
 
                                     <p class="fw-semibold d-flex justify-content-end">
                                         <a id="forgotpass" class="text-decoration-none"

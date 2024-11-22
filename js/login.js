@@ -55,6 +55,12 @@ const companyBarangay = document.getElementById('companyBarangay');
 let SignInUser = evt => {
     evt.preventDefault();
 
+    // Trigger custom validation and stop if the form is invalid
+    if (!mainForm.checkValidity()) {
+        mainForm.classList.add('was-validated');
+        return;
+    }
+
     signInWithEmailAndPassword(auth, email.value, password.value)
         .then((credentials) => {
             get(child(dbref, 'Registered_Accounts/' + credentials.user.uid)).then((snapshot) => {
@@ -63,7 +69,7 @@ let SignInUser = evt => {
                         firstname: snapshot.val().firstname,
                         middlename: snapshot.val().middlename,
                         lastname: snapshot.val().lastname,
-                        contact_no:snapshot.val().contact_no,
+                        contact_no: snapshot.val().contact_no,
                         gender: snapshot.val().gender,
                         region: snapshot.val().region,
                         province: snapshot.val().province,
@@ -93,4 +99,4 @@ let SignInUser = evt => {
         })
 }
 
-mainform.addEventListener('submit', SignInUser);
+mainForm.addEventListener('submit', SignInUser);

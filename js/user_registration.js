@@ -139,6 +139,57 @@ const RegisterUser = async (evt) => {
         return; // Stop processing
     }
 
+    // Validate contact number uniqueness
+    const contactNumberWithPrefix = "+63" + contactNo.value;
+
+    const contactNoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_contactNoRef = await get(contactNoRef);
+    let isContactNoTaken = false;
+
+    snapshot_contactNoRef.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.contact_no === contactNumberWithPrefix) {
+            isContactNoTaken = true;
+        }
+    });
+
+    if (isContactNoTaken) {
+        contactNo.classList.remove('is-valid');
+        contactNo.classList.add('is-invalid');
+        invalidFeedback.innerText = "*Contact number is already taken.";
+        invalidFeedback.style.display = 'block';
+        return;
+    } else {
+        contactNo.classList.remove('is-invalid');
+        contactNo.classList.add('is-valid');
+        invalidFeedback.style.display = 'none';
+    }
+
+    // Validate company telephone number
+    const companyTelephoneno = companyTelephoneNo.value;
+    const telephoneNoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_telephoneNoRef = await get(telephoneNoRef);
+    let isTelephoneNoTaken = false;
+
+    snapshot_telephoneNoRef.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if(userData.company_telephone_no === companyTelephoneno) {
+            isTelephoneNoTaken = true
+        }
+    });
+
+    if(isTelephoneNoTaken) {
+        companyTelephoneNo.classList.remove('is-valid');
+        companyTelephoneNo.classList.add('is-invalid');
+        companyTelephoneNoFeedback.innerText = "*Telephone number is already taken.";
+        companyTelephoneNo.style.display = 'block';
+    } else {
+        companyTelephoneNo.classList.remove('is-invalid');
+        companyTelephoneNo.classList.add('is-valid');
+        companyTelephoneNoFeedback.innerText = "";
+        companyTelephoneNoFeedback.style.display = 'none';
+    }
+
     // Validate company email uniqueness
     if (!isValidCompanyEmail(companyEmail.value)) {
         companyEmail.classList.add('is-invalid');
@@ -195,8 +246,6 @@ const RegisterUser = async (evt) => {
         confirmPassword.classList.add('is-valid'); // Optional: Add 'is-valid' if you want a green border on success
         confirmPasswordFeedback.style.display = 'none';
     }
-
-    const contactNumberWithPrefix = "+63" + contactNo.value;
 
     // Create user in Firebase Auth
     createUserWithEmailAndPassword(auth, email.value, password.value)
@@ -284,10 +333,26 @@ lastName.addEventListener('input', () => {
 });
 
 // Event listener for contact number validation
-contactNo.addEventListener('input', () => {
+contactNo.addEventListener('blur', async () => {
+    const contactNumberWithPrefix = "+63" + contactNo.value;
+    const contactNoRef = ref(db, 'Registered_Accounts/');
+    const snapshot = await get(contactNoRef);
+    let isContactNoTaken = false;
     const invalidFeedback = contactNo.nextElementSibling;
 
-    if (isValidContactNo(contactNo.value)) {
+    snapshot.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.contact_no === contactNumberWithPrefix) {
+            isContactNoTaken = true;
+        }
+    });
+
+    if (isContactNoTaken) {
+        contactNo.classList.remove('is-valid');
+        contactNo.classList.add('is-invalid');
+        invalidFeedback.innerText = "*Contact number is already taken.";
+        invalidFeedback.style.display = 'block';
+    } else if (isValidContactNo(contactNo.value)) {
         contactNo.classList.remove('is-invalid');
         contactNo.classList.add('is-valid');
         invalidFeedback.style.display = 'none';
@@ -296,6 +361,37 @@ contactNo.addEventListener('input', () => {
         contactNo.classList.add('is-invalid');
         invalidFeedback.innerText = "*Invalid contact number";
         invalidFeedback.style.display = 'block';
+    }
+});
+
+companyTelephoneNo.addEventListener('blur', async () => {
+    const companyTelephoneno = companyTelephoneNo.value;
+    const telephoneNoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_telephoneNoRef = await get(telephoneNoRef);
+    let isTelephoneNoTaken = false;
+    const companyTelephoneNoFeedback = companyTelephoneNo.nextElementSibling;
+
+    snapshot_telephoneNoRef.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if(userData.company_telephone_no === companyTelephoneno) {
+            isTelephoneNoTaken = true
+        }
+    });
+
+    if(isTelephoneNoTaken) {
+        companyTelephoneNo.classList.remove('is-valid');
+        companyTelephoneNo.classList.add('is-invalid');
+        companyTelephoneNoFeedback.innerText = "*Telephone number is already taken.";
+        companyTelephoneNo.style.display = 'block';
+    } else if(isValidTelephoneNo(companyTelephoneNo.value)) {
+        companyTelephoneNo.classList.remove('is-invalid');
+        companyTelephoneNo.classList.add('is-valid');
+        companyTelephoneNoFeedback.style.display = 'none';
+    } else {
+        companyTelephoneNo.classList.remove('is-valid');
+        companyTelephoneNo.classList.add('is-invalid');
+        companyTelephoneNoFeedback.innerText = "*Invalid telephone number.";
+        companyTelephoneNoFeedback.style.display = 'block';
     }
 });
 
@@ -357,19 +453,6 @@ confirmPassword.addEventListener('input', () => {
     }
 });
 
-companyTelephoneNo.addEventListener('input', () => {
-    const companyTelephoneNoFeedback = companyTelephoneNo.nextElementSibling;
 
-    if (isValidTelephoneNo(companyTelephoneNo.value)) {
-        companyTelephoneNo.classList.remove('is-invalid');
-        companyTelephoneNo.classList.add('is-valid');
-        companyTelephoneNoFeedback.style.display = 'none';
-    } else {
-        companyTelephoneNo.classList.remove('is-valid');
-        companyTelephoneNo.classList.add('is-invalid');
-        companyTelephoneNoFeedback.innerText = "*Invalid telephone number.";
-        companyTelephoneNoFeedback.style.display = 'block';
-    }
-});
 
 mainForm.addEventListener('submit', RegisterUser);

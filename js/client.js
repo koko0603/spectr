@@ -25,7 +25,7 @@ let staff_FirstnameInput = document.getElementById('editFirstname');
 let staff_MiddlenameInput = document.getElementById('editMiddlename');
 let staff_LastnameInput = document.getElementById('editLastname');
 
-function StaffManagement(idnumber, position, staff_firstname, staff_lastname) {
+function StaffManagement(idnumber, imageUrl, position, staff_firstname, staff_lastname) {
     let trow = document.createElement("tr");
 
     let td1 = document.createElement('td');
@@ -34,6 +34,7 @@ function StaffManagement(idnumber, position, staff_firstname, staff_lastname) {
     let td4 = document.createElement('td');
     let td5 = document.createElement('td');
     let td6 = document.createElement('td');
+    let td7 = document.createElement('td');
 
     td1.classList.add('text-center');
     td2.classList.add('text-center');
@@ -41,12 +42,14 @@ function StaffManagement(idnumber, position, staff_firstname, staff_lastname) {
     td4.classList.add('text-center');
     td5.classList.add('text-center');
     td6.classList.add('text-center');
+    td7.classList.add('text-center');
 
     td1.innerHTML = ++userID;
     td2.innerHTML = idnumber;
-    td3.innerHTML = position;
-    td4.innerHTML = staff_firstname;
-    td5.innerHTML = staff_lastname;
+    td3.innerHTML = imageUrl;
+    td4.innerHTML = position;
+    td5.innerHTML = staff_firstname;
+    td6.innerHTML = staff_lastname;
 
     let buttonContainer = document.createElement('div');
     buttonContainer.classList.add('d-flex', 'justify-content-center', 'flex-column', 'gap-2', 'flex-sm-row');
@@ -83,7 +86,7 @@ function StaffManagement(idnumber, position, staff_firstname, staff_lastname) {
     buttonContainer.appendChild(viewBtn);
     buttonContainer.appendChild(deleteBtn);
 
-    td6.appendChild(buttonContainer);
+    td7.appendChild(buttonContainer);
 
     trow.appendChild(td1);
     trow.appendChild(td2);
@@ -91,6 +94,7 @@ function StaffManagement(idnumber, position, staff_firstname, staff_lastname) {
     trow.appendChild(td4);
     trow.appendChild(td5);
     trow.appendChild(td6);
+    trow.appendChild(td7);
 
     tbody.appendChild(trow);
 }
@@ -100,7 +104,7 @@ function AddAllItemsToTable(TheUser) {
     tbody.innerHTML = "";
 
     TheUser.reverse().forEach(element => {
-        StaffManagement(element.idnumber, element.position, element.staff_firstname, element.staff_lastname);
+        StaffManagement(element.idnumber, element.imageUrl, element.position, element.staff_firstname, element.staff_lastname);
     });
 
     if ($.fn.DataTable.isDataTable('#example')) {
