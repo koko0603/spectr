@@ -17,6 +17,16 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const auth = getAuth(app);
 
+function isValidName(name) {
+    return /^[a-zA-Z\s]+$/.test(name);
+}
+
+// Function to validate the contact number format
+function isValidContactNo(staffcontactNoInput) {
+    // Check if the number starts with 9 and has 9 more digits
+    return /^9\d{9}$/.test(staffcontactNoInput);
+}
+
 let userID = 0;
 let tbody = document.getElementById('tbody1');
 
@@ -25,7 +35,7 @@ let staff_FirstnameInput = document.getElementById('editFirstname');
 let staff_MiddlenameInput = document.getElementById('editMiddlename');
 let staff_LastnameInput = document.getElementById('editLastname');
 
-function StaffManagement(idnumber, imageUrl, position, staff_firstname, staff_lastname) {
+function StaffManagement(idnumber, position, staff_firstname, staff_lastname) {
     let trow = document.createElement("tr");
 
     let td1 = document.createElement('td');
@@ -34,7 +44,6 @@ function StaffManagement(idnumber, imageUrl, position, staff_firstname, staff_la
     let td4 = document.createElement('td');
     let td5 = document.createElement('td');
     let td6 = document.createElement('td');
-    let td7 = document.createElement('td');
 
     td1.classList.add('text-center');
     td2.classList.add('text-center');
@@ -42,14 +51,12 @@ function StaffManagement(idnumber, imageUrl, position, staff_firstname, staff_la
     td4.classList.add('text-center');
     td5.classList.add('text-center');
     td6.classList.add('text-center');
-    td7.classList.add('text-center');
 
     td1.innerHTML = ++userID;
     td2.innerHTML = idnumber;
-    td3.innerHTML = imageUrl;
-    td4.innerHTML = position;
-    td5.innerHTML = staff_firstname;
-    td6.innerHTML = staff_lastname;
+    td3.innerHTML = position;
+    td4.innerHTML = staff_firstname;
+    td5.innerHTML = staff_lastname;
 
     let buttonContainer = document.createElement('div');
     buttonContainer.classList.add('d-flex', 'justify-content-center', 'flex-column', 'gap-2', 'flex-sm-row');
@@ -86,7 +93,7 @@ function StaffManagement(idnumber, imageUrl, position, staff_firstname, staff_la
     buttonContainer.appendChild(viewBtn);
     buttonContainer.appendChild(deleteBtn);
 
-    td7.appendChild(buttonContainer);
+    td6.appendChild(buttonContainer);
 
     trow.appendChild(td1);
     trow.appendChild(td2);
@@ -94,7 +101,6 @@ function StaffManagement(idnumber, imageUrl, position, staff_firstname, staff_la
     trow.appendChild(td4);
     trow.appendChild(td5);
     trow.appendChild(td6);
-    trow.appendChild(td7);
 
     tbody.appendChild(trow);
 }
@@ -104,7 +110,7 @@ function AddAllItemsToTable(TheUser) {
     tbody.innerHTML = "";
 
     TheUser.reverse().forEach(element => {
-        StaffManagement(element.idnumber, element.imageUrl, element.position, element.staff_firstname, element.staff_lastname);
+        StaffManagement(element.idnumber, element.position, element.staff_firstname, element.staff_lastname);
     });
 
     if ($.fn.DataTable.isDataTable('#example')) {
@@ -192,7 +198,7 @@ auth.onAuthStateChanged((user) => {
 //     }
 // }
 
-let originalData = {};
+let originalData = {}; // Store original data globally
 
 function editButtonClicked(idnumber) {
     event.preventDefault();
@@ -215,15 +221,22 @@ function editButtonClicked(idnumber) {
 
                     console.log("Fetched Data: ", userData);
 
+                    // Store the original data for comparison later
+                    originalData = { ...userData }; // Create a shallow copy
+
                     // Populate modal fields with user data
                     document.getElementById("editIDNumber").value = userData.idnumber;
                     document.getElementById("editPosition").value = userData.position;
                     document.getElementById("editFirstname").value = userData.staff_firstname;
                     document.getElementById("editMiddlename").value = userData.staff_middlename;
                     document.getElementById("editLastname").value = userData.staff_lastname;
-                    document.getElementById("editContactNo").value = userData.staff_contact_no.slice(3);
+                    document.getElementById("editContactNo").value = userData.staff_contact_no.slice(3); // Remove the "+63"
                     document.getElementById('editGender').value = userData.staff_gender;
                     document.getElementById('editAddressInfo').value = userData.staff_address_info;
+                    document.getElementById('displayRegion').value = userData.staff_region;
+                    document.getElementById('displayProvince').value = userData.staff_province;
+                    document.getElementById('displayCity').value = userData.staff_city;
+                    document.getElementById('displayBarangay').value = userData.staff_barangay;
 
                     // Save the user key in the Save button attribute
                     document.getElementById("saveEditBtn").setAttribute("data-user-key", childSnapshot.key);
@@ -234,6 +247,94 @@ function editButtonClicked(idnumber) {
         console.error("User is not logged in.");
     }
 }
+
+function isAddressComplete() {
+    const region = document.getElementById('editRegion').value;
+    const province = document.getElementById('editProvince').value;
+    const city = document.getElementById('editCity').value;
+    const barangay = document.getElementById('editBarangay').value;
+
+    // Check if any of the address fields are empty
+    if (!region || !province || !city || !barangay) {
+        return false;
+    }
+
+    return true;
+}
+
+document.getElementById("saveEditBtn").addEventListener("click", function () {
+    const user = auth.currentUser;
+
+    let contactNumber = document.getElementById('editContactNo').value;
+
+    // Check if the contact number starts with '63' and prepend '+' if not
+    if (!contactNumber.startsWith("+63")) {
+        contactNumber = "+63" + contactNumber; // Add the prefix if missing
+    }
+
+    // Check if address information is complete
+    if (!isAddressComplete()) {
+        alert("Please complete the address information.");
+        return; // Stop execution if address is incomplete
+    }
+
+    if (user) {
+        const uid = user.uid;
+        const userKey = this.getAttribute("data-user-key");
+
+        // Get updated data from modal inputs
+        const updatedData = {
+            idnumber: document.getElementById("editIDNumber").value,
+            position: document.getElementById("editPosition").value,
+            staff_firstname: document.getElementById("editFirstname").value,
+            staff_middlename: document.getElementById("editMiddlename").value,
+            staff_lastname: document.getElementById("editLastname").value,
+            staff_contact_no: contactNumber,
+            staff_gender: document.getElementById('editGender').value,
+            staff_region: document.getElementById('editRegion').value,
+            staff_province: document.getElementById('editProvince').value,
+            staff_city: document.getElementById('editCity').value,
+            staff_barangay: document.getElementById('editBarangay').value,
+            staff_address_info: document.getElementById('editAddressInfo').value
+        };
+
+        // Compare each field between originalData and updatedData
+        let dataHasChanged = false;
+
+        // Iterate over the updatedData and check for differences
+        for (let key in updatedData) {
+            if (updatedData[key] !== originalData[key]) {
+                dataHasChanged = true;
+                break; // Exit loop once we find any change
+            }
+        }
+
+        // If data has changed, proceed with saving and showing the modal
+        if (dataHasChanged && userKey) {
+            const userRef = ref(db, `Registered_Accounts/${uid}/Staff_Management/${userKey}`);
+
+            set(userRef, updatedData)
+                .then(() => {
+                    // Show the save changes modal
+                    let savechangesModal = new bootstrap.Modal(document.getElementById('savechangesModal'));
+                    savechangesModal.show();
+
+                    // Refresh the table data
+                    GetAllDataOnce();
+                })
+                .catch((error) => {
+                    console.error("Error updating user:", error.message);
+                    alert("Error updating user. Please try again.");
+                });
+        } else if (!dataHasChanged) {
+            alert("No changes detected. Please make edits before saving.");
+        } else {
+            alert("User key not found. Please try again.");
+        }
+    }
+});
+
+
 
 function viewButtonClicked(idnumber) {
     const user = auth.currentUser;
@@ -273,83 +374,9 @@ function viewButtonClicked(idnumber) {
     }
 }
 
-document.getElementById("saveEditBtn").addEventListener("click", function () {
-    const user = auth.currentUser;
 
-    //const contactNumberWithPrefix = "+63" + document.getElementById('editContactNo').value;
-    let contactNumber = document.getElementById('editContactNo').value;
 
-    // Check if the contact number starts with '63' and prepend '+'
-    if (!contactNumber.startsWith("+63")) {
-        contactNumber = "+63" + contactNumber; // Add the prefix if missing
-    }
 
-    if (user) {
-        const uid = user.uid;
-        const userKey = this.getAttribute("data-user-key");
-
-        // Updated data from modal inputs
-        const updatedData = {
-            idnumber: document.getElementById("editIDNumber").value,
-            position: document.getElementById("editPosition").value,
-            staff_firstname: document.getElementById("editFirstname").value,
-            staff_middlename: document.getElementById("editMiddlename").value,
-            staff_lastname: document.getElementById("editLastname").value,
-            staff_contact_no: contactNumber,
-            staff_gender: document.getElementById('editGender').value,
-            staff_region: document.getElementById('editRegion').value,
-            staff_province: document.getElementById('editProvince').value,
-            staff_city: document.getElementById('editCity').value,
-            staff_barangay: document.getElementById('editBarangay').value,
-            staff_address_info: document.getElementById('editAddressInfo').value
-        };
-
-        // Check if any data has changed
-        const dataHasChanged = Object.keys(updatedData).some(key => updatedData[key] !== originalData[key]);
-
-        if (dataHasChanged && userKey) {
-            const userRef = ref(db, `Registered_Accounts/${uid}/Staff_Management/${userKey}`);
-
-            set(userRef, updatedData)
-                .then(() => {
-                    // Show the save changes modal
-                    let savechangesModal = new bootstrap.Modal(document.getElementById('savechangesModal'));
-                    savechangesModal.show();
-
-                    // Refresh the table data
-                    GetAllDataOnce();
-                })
-                .catch((error) => {
-                    console.error("Error updating user:", error.message);
-                    alert("Error updating user. Please try again.");
-                });
-        } else if (!dataHasChanged) {
-            alert("No changes detected. Please make edits before saving.");
-        } else {
-            alert("User key not found. Please try again.");
-        }
-
-        // if (userKey) {
-        //     const userRef = ref(db, `Registered_Accounts/${uid}/Staff_Management/${userKey}`);
-
-        //     set(userRef, updatedData)
-        //         .then(() => {
-        //             // Show the save changes modal
-        //             let savechangesModal = new bootstrap.Modal(document.getElementById('savechangesModal'));
-        //             savechangesModal.show();
-
-        //             // Refresh the table data
-        //             GetAllDataOnce();
-        //         })
-        //         .catch((error) => {
-        //             console.error("Error updating user:", error.message);
-        //             alert("Error updating user. Please try again.");
-        //         });
-        // } else {
-        //     alert("User key not found. Please try again.");
-        // }
-    }
-});
 
 // Delete Button Functionality
 function deleteButtonClicked(e, idnumber) {
@@ -387,8 +414,6 @@ function deleteButtonClicked(e, idnumber) {
         console.error("User is not logged in.");
     }
 }
-
-
 
 // Event listeners for first name, middle name, and last name
 staff_FirstnameInput.addEventListener('input', () => {

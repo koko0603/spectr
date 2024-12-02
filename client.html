@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Staff Management</title>
+    <title>SPECTR</title>
 
     <link rel="shortcut icon" href="images/logo/SPECTR-logo-new.png" type="image/x-icon">
 
@@ -226,7 +226,6 @@
                                             <tr class="text-center">
                                                 <th class="text-center">No</th>
                                                 <th class="text-center">ID Number</th>
-                                                <th class="text-center">Image</th>
                                                 <th class="text-center">Position</th>
                                                 <th class="text-center">First Name</th>
                                                 <th class="text-center">Last Name</th>
@@ -688,7 +687,7 @@
                                                     <div data-mdb-input-init class="form-outline">
                                                         <select class="form-control" id="editRegion"
                                                             onchange="EditStaffProvince()" required>
-                                                            <option value="">Select Region</option>
+                                                            <option id="displayRegion" value="" disabled selected>Select Region</option>
                                                             <option value="Mindanao">Mindanao</ option>
                                                             <option value="NCR">NCR</option>
                                                             <option value="North Luzon">North Luzon</option>
@@ -701,7 +700,7 @@
                                                     <div data-mdb-input-init class="form-outline">
                                                         <select class="form-control" id="editProvince"
                                                             onchange="EditStaffCity()" required>
-                                                            <option value="">Select Province</option>
+                                                            <option id="displayProvince" value="" disabled selected>Select Province</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -709,14 +708,14 @@
                                                     <div data-mdb-input-init class="form-outline">
                                                         <select class="form-control" id="editCity"
                                                             onchange="EditStaffBarangay()" required>
-                                                            <option value="">Select City</option>
+                                                            <option id="displayCity" value="" disabled selected>Select City</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-4 col-sm-6 col-lg-4 mb-2">
                                                     <div data-mdb-input-init class="form-outline">
                                                         <select class="form-control" id="editBarangay">
-                                                            <option value="">Select Barangay</option>
+                                                            <option id="displayBarangay" value="" disabled selected>Select Barangay</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -941,12 +940,12 @@
     <div class="modal fade" id="viewStaffModal" tabindex="-1" aria-labelledby="viewStaffModalLabel" aria-hidden="true"
         data-bs-backdrop="static">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="height: 90vh; overflow: auto;">
+            <div class="modal-content" style="height: 90vh;">
                 <div class="modal-header text-white" style="background-color: #000000;">
                     <h5 class="modal-title fw-bold" id="editStaffModalLabel">View Staff Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="overflow: auto;">
                     <form class="p-3" id="editStaffForm">
                         <h3 class="mb-3 fs-5 fw-semibold">Personal Information</h3>
                         <hr class="">

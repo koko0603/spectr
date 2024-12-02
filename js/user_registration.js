@@ -68,7 +68,6 @@ function isValidCompanyEmail(companyEmail) {
         !/\.$/.test(companyEmail.split('@')[0]);   // Ensure the local part does not end with a dot
 }
 
-
 // Password validation function
 function isValidPassword(password) {
     const minLength = 8;
@@ -131,12 +130,34 @@ const RegisterUser = async (evt) => {
         return;
     }
 
-    // Check if the email field is empty
-    if (!email.value) {
+    // Validates email
+    const checkEmail = email.value;
+    const emailRef = ref(db, 'Registered_Accounts/');
+    const snapshot_emailRef = await get(emailRef);
+    let isUserEmailTaken = false;
+
+    snapshot_emailRef.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.email === checkEmail) {
+            isUserEmailTaken = true;
+        }
+    })
+
+    if (isUserEmailTaken) {
+        email.classList.remove('is-valid');
+        email.classList.add('is-invalid');
+        emailFeedback.innerText = "*Email is already taken.";
+        emailFeedback.style.display = 'block';
+        return;
+    } else if (!email.value) {
         email.classList.add('is-invalid');
         emailFeedback.innerText = "*Please provide a valid email.";
         emailFeedback.style.display = 'block';
         return; // Stop processing
+    } else {
+        email.classList.remove('is-invalid');
+        email.classList.add('is-valid');
+        emailFeedback.style.display = 'none';
     }
 
     // Validate contact number uniqueness
@@ -173,12 +194,12 @@ const RegisterUser = async (evt) => {
 
     snapshot_telephoneNoRef.forEach((userSnapshot) => {
         const userData = userSnapshot.val();
-        if(userData.company_telephone_no === companyTelephoneno) {
+        if (userData.company_telephone_no === companyTelephoneno) {
             isTelephoneNoTaken = true
         }
     });
 
-    if(isTelephoneNoTaken) {
+    if (isTelephoneNoTaken) {
         companyTelephoneNo.classList.remove('is-valid');
         companyTelephoneNo.classList.add('is-invalid');
         companyTelephoneNoFeedback.innerText = "*Telephone number is already taken.";
@@ -373,17 +394,17 @@ companyTelephoneNo.addEventListener('blur', async () => {
 
     snapshot_telephoneNoRef.forEach((userSnapshot) => {
         const userData = userSnapshot.val();
-        if(userData.company_telephone_no === companyTelephoneno) {
+        if (userData.company_telephone_no === companyTelephoneno) {
             isTelephoneNoTaken = true
         }
     });
 
-    if(isTelephoneNoTaken) {
+    if (isTelephoneNoTaken) {
         companyTelephoneNo.classList.remove('is-valid');
         companyTelephoneNo.classList.add('is-invalid');
         companyTelephoneNoFeedback.innerText = "*Telephone number is already taken.";
         companyTelephoneNo.style.display = 'block';
-    } else if(isValidTelephoneNo(companyTelephoneNo.value)) {
+    } else if (isValidTelephoneNo(companyTelephoneNo.value)) {
         companyTelephoneNo.classList.remove('is-invalid');
         companyTelephoneNo.classList.add('is-valid');
         companyTelephoneNoFeedback.style.display = 'none';
@@ -392,6 +413,41 @@ companyTelephoneNo.addEventListener('blur', async () => {
         companyTelephoneNo.classList.add('is-invalid');
         companyTelephoneNoFeedback.innerText = "*Invalid telephone number.";
         companyTelephoneNoFeedback.style.display = 'block';
+    }
+});
+
+email.addEventListener('blur', async () => {
+    const checkEmail = email.value;
+    const emailRef = ref(db, 'Registered_Accounts/');
+    const snapshot_emailRef = await get(emailRef);
+    let isUserEmailTaken = false;
+
+    snapshot_emailRef.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.email === checkEmail) {
+            isUserEmailTaken = true;
+        }
+    })
+
+    if (isUserEmailTaken) {
+        email.classList.remove('is-valid');
+        email.classList.add('is-invalid');
+        emailFeedback.innerText = "*Email is already taken.";
+        emailFeedback.style.display = 'block';
+        return;
+    } else if (!email.value) {
+        email.classList.add('is-invalid');
+        emailFeedback.innerText = "*Please provide a valid email.";
+        emailFeedback.style.display = 'block';
+        return; // Stop processing
+    } else if (isValidEmail(email.value)) {
+        email.classList.remove('is-invalid');
+        email.classList.add('is-valid');
+        emailFeedback.style.display = 'none';
+    } else {
+        email.classList.remove('is-invalid');
+        email.classList.add('is-valid');
+        emailFeedback.style.display = 'none';
     }
 });
 
