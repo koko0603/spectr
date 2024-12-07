@@ -61,6 +61,10 @@ let SignInUser = evt => {
         return;
     }
 
+    // Clear previous error messages
+    password.classList.remove('is-invalid');
+    passwordFeedback.style.display = 'none';
+
     signInWithEmailAndPassword(auth, email.value, password.value)
         .then((credentials) => {
             get(child(dbref, 'Registered_Accounts/' + credentials.user.uid)).then((snapshot) => {
@@ -93,9 +97,14 @@ let SignInUser = evt => {
             })
         })
         .catch((error) => {
-            alert(error.message);
-            console.log(error.code);
-            console.log(error.message);
+            password.classList.remove('is-valid');
+            password.classList.add('is-invalid');
+            passwordFeedback.innerText = "*Incorrect Password.";
+            passwordFeedback.style.display = 'block';
+            return;
+            // alert(error.message);
+            // console.log(error.code);
+            // console.log(error.message);
         })
 }
 
