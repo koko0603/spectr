@@ -90,7 +90,7 @@
                                         id="inputGroupPrepend">+63</span>
                                     <input type="text" class="form-control" id="contactNo"
                                         aria-describedby="inputGroupPrepend" required placeholder="9XX XXX XXXX">
-                                    <div class="invalid-feedback">
+                                    <div class="invalid-feedback" id="contactnoFeedback">
                                         *Please provide a contact number.
                                     </div>
                                 </div>
@@ -165,8 +165,8 @@
                                 <input type="text" id="addressInfo"
                                     placeholder="Address Info: Street Name, Building Name, House Number..."
                                     class="form-control" required />
-                                <div class="invalid-feedback">
-                                    *Please provide other details.
+                                <div class="invalid-feedback" id="addressInfoFeedback">
+                                    *Please provide address info.
                                 </div>
                             </div>
                         </div>
@@ -191,18 +191,31 @@
                         <div class="col-sm-6 col-xl-4 mt-2">
                             <div data-mdb-input-init class="form-outline">
                                 <label class="form-label" for="password">Password</label>
-                                <input type="password" id="password" class="form-control" required />
-                                <div class="invalid-feedback" id="passwordFeedback">
-                                    *Please provide a valid password.
+                                <div class="input-group mb-4">
+                                    <input type="password" id="password" class="form-control" placeholder="Password"
+                                        aria-label="Password" aria-describedby="password-icon" required>
+                                    <span class="input-group-text" id="toggle-password-icon" style="cursor: pointer;">
+                                        <i class="far fa-eye" id="togglePassword"></i>
+                                    </span>
+                                    <div class="invalid-feedback" id="passwordFeedback">
+                                        *Please provide a password.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6 col-xl-4 mt-2">
                             <div data-mdb-input-init class="form-outline">
                                 <label class="form-label" for="confirmPassword">Confirm Password</label>
-                                <input type="password" id="confirmPassword" class="form-control" required />
-                                <div class="invalid-feedback" id="confirmPasswordFeedback">
-                                    *Please confirm your password.
+                                <div class="input-group mb-4">
+                                    <input type="password" id="confirmPassword" class="form-control"
+                                        placeholder="Password" aria-label="Password" aria-describedby="password-icon"
+                                        required>
+                                    <span class="input-group-text" id="toggle-password-icon" style="cursor: pointer;">
+                                        <i class="far fa-eye" id="togglePassword2"></i>
+                                    </span>
+                                    <div class="invalid-feedback" id="confirmPasswordFeedback">
+                                        *Please confirm your password.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -307,9 +320,14 @@
                         <div class="col-sm-6 col-xl-8 mt-2">
                             <div data-mdb-input-init class="form-outline">
                                 <input type="text" id="companyAddress" class="form-control"
+<<<<<<< HEAD:camera/templates/add-account.html
                                     placeholder="Address Info: Street Name, Building Name, House Number..."
                                     required />
                                 <div class="invalid-feedback">
+=======
+                                    placeholder="Address Info: Street Name, Building Name, House Number..." required />
+                                <div class="invalid-feedback" id="companyAddressFeedback">
+>>>>>>> cb24122762991d73fe980d836bd44bc8622716b2:add-account.html
                                     *Please provide a valid company address.
                                 </div>
                             </div>
@@ -353,7 +371,38 @@
     </div>
 
     <!-- <script type="module" src="js/copy.js"></script> -->
+<<<<<<< HEAD:camera/templates/add-account.html
     <script type="module" src="../static/js/user_registration.js"></script>
+=======
+    <script>
+        // Toggle password visibility for the password field
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordField = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+
+            // Toggle the icon class
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Toggle password visibility for the confirm password field
+        const togglePassword2 = document.querySelector('#togglePassword2');
+        const confirmPasswordField = document.querySelector('#confirmPassword');
+
+        togglePassword2.addEventListener('click', function () {
+            const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordField.setAttribute('type', type);
+
+            // Toggle the icon class
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
+
+
+    <script type="module" src="js/user_registration.js"></script>
+>>>>>>> cb24122762991d73fe980d836bd44bc8622716b2:add-account.html
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

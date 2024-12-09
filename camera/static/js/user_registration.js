@@ -95,9 +95,17 @@ function isValidTelephoneNo(telephoneNo) {
 
 const mainForm = document.getElementById('mainform');
 const firstName = document.getElementById('firstName');
+const firstnameFeedback = document.getElementById('firstnameFeedback');
+
 const middleName = document.getElementById('middleName');
+const middlenameFeedback = document.getElementById('middlenameFeedback');
+
 const lastName = document.getElementById('lastName');
+const lastnameFeedback = document.getElementById('lastnameFeedback');
+
 const contactNo = document.getElementById('contactNo');
+const contactnoFeedback = document.getElementById('contactnoFeedback');
+
 const gender = document.getElementById('gender');
 const region = document.getElementById('region');
 const province = document.getElementById('province');
@@ -154,15 +162,20 @@ const RegisterUser = async (evt) => {
         emailFeedback.innerText = "*Please provide a valid email.";
         emailFeedback.style.display = 'block';
         return; // Stop processing
-    } else {
+    } else if (isValidEmail(email.value)) {
         email.classList.remove('is-invalid');
         email.classList.add('is-valid');
         emailFeedback.style.display = 'none';
+    } else {
+        email.classList.remove('is-valid');
+        email.classList.add('is-invalid');
+        emailFeedback.innerText = "*Invalid email.";
+        emailFeedback.style.display = 'block';
     }
 
     // Validate contact number uniqueness
     const contactNumberWithPrefix = "+63" + contactNo.value;
-
+    const invalidFeedback = contactNo.nextElementSibling;
     const contactNoRef = ref(db, 'Registered_Accounts/');
     const snapshot_contactNoRef = await get(contactNoRef);
     let isContactNoTaken = false;
@@ -203,7 +216,7 @@ const RegisterUser = async (evt) => {
         companyTelephoneNo.classList.remove('is-valid');
         companyTelephoneNo.classList.add('is-invalid');
         companyTelephoneNoFeedback.innerText = "*Telephone number is already taken.";
-        companyTelephoneNo.style.display = 'block';
+        companyTelephoneNoFeedback.style.display = 'block';
     } else {
         companyTelephoneNo.classList.remove('is-invalid');
         companyTelephoneNo.classList.add('is-valid');
@@ -240,6 +253,68 @@ const RegisterUser = async (evt) => {
             companyEmail.classList.add('is-valid');
             companyEmailFeedback.style.display = 'none';
         }
+    }
+
+    // Validates User Address Info
+    const checkAddressInfo = addressInfo.value;
+    const AddressInfoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_addressinfo = await get(AddressInfoRef);
+    let isUserAddressInfo = false;
+
+    snapshot_addressinfo.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.address_info === checkAddressInfo) {
+            isUserAddressInfo = true;
+        }
+    })
+
+    if (isUserAddressInfo) {
+        addressInfo.classList.remove('is-valid');
+        addressInfo.classList.add('is-invalid');
+        addressInfoFeedback.innerText = "*Invalid address info.";
+        addressInfoFeedback.style.display = 'block';
+        return;
+    } else if (!addressInfo.value) {
+        addressInfo.classList.remove('is-valid');
+        addressInfo.classList.add('is-invalid');
+        addressInfoFeedback.innerText = "*Please provide address info.";
+        addressInfoFeedback.style.display = 'block';
+        return; // Stop processing
+    } else {
+        addressInfo.classList.remove('is-invalid');
+        addressInfo.classList.add('is-valid');
+        addressInfoFeedback.style.display = 'none';
+    }
+
+    // Validates User Address Info
+    const checkCompanyAddressInfo = companyAddress.value;
+    const CompanyAddressInfoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_companyaddressinfo = await get(CompanyAddressInfoRef);
+    let isUserCompanyAddressInfo = false;
+
+    snapshot_companyaddressinfo.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.company_address === checkCompanyAddressInfo) {
+            isUserCompanyAddressInfo = true;
+        }
+    })
+
+    if (isUserCompanyAddressInfo) {
+        companyAddress.classList.remove('is-valid');
+        companyAddress.classList.add('is-invalid');
+        companyAddressFeedback.innerText = "*Invalid address info.";
+        companyAddressFeedback.style.display = 'block';
+        return;
+    } else if (!companyAddress.value) {
+        companyAddress.classList.remove('is-valid');
+        companyAddress.classList.add('is-invalid');
+        companyAddressFeedback.innerText = "*Please provide company address info.";
+        companyAddressFeedback.style.display = 'block';
+        return; // Stop processing
+    } else {
+        companyAddress.classList.remove('is-invalid');
+        companyAddress.classList.add('is-valid');
+        companyAddressFeedback.style.display = 'none';
     }
 
     // Validate password format
@@ -318,12 +393,12 @@ firstName.addEventListener('input', () => {
     if (isValidName(firstName.value)) {
         firstName.classList.remove('is-invalid');
         firstName.classList.add('is-valid');
-        firstNameFeedback.style.display = 'none';
+        firstnameFeedback.style.display = 'none';
     } else {
         firstName.classList.remove('is-valid');
         firstName.classList.add('is-invalid');
-        firstNameFeedback.innerText = "*Invalid first name.";
-        firstNameFeedback.style.display = 'block';
+        firstnameFeedback.innerText = "*Invalid first name.";
+        firstnameFeedback.style.display = 'block';
     }
 });
 
@@ -331,12 +406,12 @@ middleName.addEventListener('input', () => {
     if (isValidName(middleName.value)) {
         middleName.classList.remove('is-invalid');
         middleName.classList.add('is-valid');
-        middleNameFeedback.style.display = 'none';
+        middlenameFeedback.style.display = 'none';
     } else {
         middleName.classList.remove('is-valid');
         middleName.classList.add('is-invalid');
-        middleNameFeedback.innerText = "*Invalid middle name.";
-        middleNameFeedback.style.display = 'block';
+        middlenameFeedback.innerText = "*Invalid middle name.";
+        middlenameFeedback.style.display = 'block';
     }
 });
 
@@ -344,12 +419,12 @@ lastName.addEventListener('input', () => {
     if (isValidName(lastName.value)) {
         lastName.classList.remove('is-invalid');
         lastName.classList.add('is-valid');
-        lastNameFeedback.style.display = 'none';
+        lastnameFeedback.style.display = 'none';
     } else {
         lastName.classList.remove('is-valid');
         lastName.classList.add('is-invalid');
-        lastNameFeedback.innerText = "*Invalid last name.";
-        lastNameFeedback.style.display = 'block';
+        lastnameFeedback.innerText = "*Invalid last name.";
+        lastnameFeedback.style.display = 'block';
     }
 });
 
@@ -445,18 +520,6 @@ email.addEventListener('blur', async () => {
         email.classList.add('is-valid');
         emailFeedback.style.display = 'none';
     } else {
-        email.classList.remove('is-invalid');
-        email.classList.add('is-valid');
-        emailFeedback.style.display = 'none';
-    }
-});
-
-email.addEventListener('input', () => {
-    if (isValidEmail(email.value)) {
-        email.classList.remove('is-invalid');
-        email.classList.add('is-valid');
-        emailFeedback.style.display = 'none';
-    } else {
         email.classList.remove('is-valid');
         email.classList.add('is-invalid');
         emailFeedback.innerText = "*Invalid email.";
@@ -464,16 +527,102 @@ email.addEventListener('input', () => {
     }
 });
 
-companyEmail.addEventListener('input', () => {
-    if (isValidCompanyEmail(companyEmail.value)) {
-        companyEmail.classList.remove('is-invalid');
-        companyEmail.classList.add('is-valid');
-        companyEmailFeedback.style.display = 'none';
+companyAddress.addEventListener('blur', async () => {
+    // Validates User Address Info
+    const checkCompanyAddressInfo = companyAddress.value;
+    const CompanyAddressInfoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_companyaddressinfo = await get(CompanyAddressInfoRef);
+    let isUserCompanyAddressInfo = false;
+
+    snapshot_companyaddressinfo.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.company_address === checkCompanyAddressInfo) {
+            isUserCompanyAddressInfo = true;
+        }
+    })
+
+    if (isUserCompanyAddressInfo) {
+        companyAddress.classList.remove('is-valid');
+        companyAddress.classList.add('is-invalid');
+        companyAddressFeedback.innerText = "*Invalid address info.";
+        companyAddressFeedback.style.display = 'block';
+        return;
+    } else if (!companyAddress.value) {
+        companyAddress.classList.remove('is-valid');
+        companyAddress.classList.add('is-invalid');
+        companyAddressFeedback.innerText = "*Please provide company address info.";
+        companyAddressFeedback.style.display = 'block';
+        return; // Stop processing
     } else {
-        companyEmail.classList.remove('is-valid');
+        companyAddress.classList.remove('is-invalid');
+        companyAddress.classList.add('is-valid');
+        companyAddressFeedback.style.display = 'none';
+    }
+});
+
+addressInfo.addEventListener('blur', async () => {
+    // Validates User Address Info
+    const checkAddressInfo = addressInfo.value;
+    const AddressInfoRef = ref(db, 'Registered_Accounts/');
+    const snapshot_addressinfo = await get(AddressInfoRef);
+    let isUserAddressInfo = false;
+
+    snapshot_addressinfo.forEach((userSnapshot) => {
+        const userData = userSnapshot.val();
+        if (userData.address_info === checkAddressInfo) {
+            isUserAddressInfo = true;
+        }
+    })
+
+    if (isUserAddressInfo) {
+        addressInfo.classList.remove('is-valid');
+        addressInfo.classList.add('is-invalid');
+        addressInfoFeedback.innerText = "*Invalid address info.";
+        addressInfoFeedback.style.display = 'block';
+        return;
+    } else if (!addressInfo.value) {
+        addressInfo.classList.remove('is-valid');
+        addressInfo.classList.add('is-invalid');
+        addressInfoFeedback.innerText = "*Please provide address info.";
+        addressInfoFeedback.style.display = 'block';
+        return; // Stop processing
+    } else {
+        addressInfo.classList.remove('is-invalid');
+        addressInfo.classList.add('is-valid');
+        addressInfoFeedback.style.display = 'none';
+    }
+});
+
+companyEmail.addEventListener('blur', async () => {
+    // Validate company email uniqueness
+    if (!isValidCompanyEmail(companyEmail.value)) {
         companyEmail.classList.add('is-invalid');
-        companyEmailFeedback.innerText = "*Invalid company email format.";
+        companyEmailFeedback.innerText = "*Please provide a valid company email.";
         companyEmailFeedback.style.display = 'block';
+        return; // Stop processing
+    } else {
+        // Check if company email already exists in Firebase Database
+        const companyEmailRef = ref(db, `Registered_Accounts/`);
+        const snapshot = await get(companyEmailRef);
+        let isEmailTaken = false;
+
+        snapshot.forEach((userSnapshot) => {
+            const userData = userSnapshot.val();
+            if (userData.company_email === companyEmail.value) {
+                isEmailTaken = true;
+            }
+        });
+
+        if (isEmailTaken) {
+            companyEmail.classList.add('is-invalid');
+            companyEmailFeedback.innerText = "Company email is already taken.";
+            companyEmailFeedback.style.display = 'block';
+            return;
+        } else {
+            companyEmail.classList.remove('is-invalid');
+            companyEmail.classList.add('is-valid');
+            companyEmailFeedback.style.display = 'none';
+        }
     }
 })
 
@@ -508,7 +657,6 @@ confirmPassword.addEventListener('input', () => {
         confirmPasswordFeedback.style.display = 'block';
     }
 });
-
 
 
 mainForm.addEventListener('submit', RegisterUser);
